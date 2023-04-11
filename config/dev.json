@@ -1,0 +1,9 @@
+{
+	"envName": "dev",
+	"PORT": 3001,
+	"hostname": "http://localhost:3001/",
+	"mongoUrl": "mongodb+srv://vvenoth2016:venoth@cluster0.zpzpni8.mongodb.net/guest_room_booking?retryWrites=true&w=majority",
+	"dbName": "guest_room_booking",
+	"secure": false,
+    "JWT_SECRET_KEY": "SECRET_KEY"
+}
