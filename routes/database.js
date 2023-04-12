@@ -105,8 +105,8 @@ module.exports.updateHouse = function (searchCriteria, updatedData) {
 }
 
 module.exports.createRoom = function (document) {
-	if (document.houseid) {
-		document.houseid = new mongo.ObjectId(document.houseid);
+	if (document.owner) {
+		document.owner = new mongo.ObjectId(document.owner);
 	}
 	return new Promise((resolve, reject) => {
 		try {
@@ -126,18 +126,15 @@ module.exports.getRooms = function (searchCriteria = {}) {
 	if (searchCriteria._id) {
 		searchCriteria._id = new mongo.ObjectId(searchCriteria._id);
 	}
-	if (searchCriteria.houseid) {
-		searchCriteria.houseid = new mongo.ObjectId(searchCriteria.houseid);
+	if (searchCriteria.owner) {
+		searchCriteria.owner = new mongo.ObjectId(searchCriteria.owner);
 	}
-
+	console.log(searchCriteria)
 	return new Promise((resolve, reject) => {
-		roomCollections.find(searchCriteria).toArray(function (err, docs) {
-			if (err) {
-				reject(err);
-			}
-			else {
-				resolve(docs);
-			}
+		roomCollections.find(searchCriteria).toArray().then(value => {
+			resolve(value);
+		}).catch(reason =>{
+			reject(reason)
 		});
 	});
 }

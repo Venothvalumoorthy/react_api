@@ -4,6 +4,8 @@ var MongoDB = require('./../routes/database');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
+const { protected } = require("./middleware/auth.middleware.js");
+
 
 // create user
 router.post('/insert', async (req,res)=>{
@@ -88,7 +90,7 @@ router.post('/insert', async (req,res)=>{
 })
 
 // get user
-router.post('/search',async (req,res)=>{
+router.post('/search',protected, async (req,res)=>{
     let errors = [];
 	let body = req.body;
 

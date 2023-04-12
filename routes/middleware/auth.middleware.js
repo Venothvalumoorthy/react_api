@@ -10,7 +10,7 @@ module.exports.protected = (req, res, next) =>{
                 return res.status(400).send({error:"Invalid Authorization Token"});
             }
         } catch (error) {
-            return res.status(500).send({error: error.message});
+            return res.status(500).send({error: "Token no present"});
         }
     }
     else{

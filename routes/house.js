@@ -160,8 +160,7 @@ router.post('/update', protected, async function (req, res, next) {
 // create room
 router.post('/rooms/insert', protected, async (req,res)=>{
     let errors = [];
-	let body = req.body;
-
+	let body = req.body.data;
 	if (typeof body === 'string') {
 		try {
 			body = JSON.parse(body);
@@ -171,7 +170,7 @@ router.post('/rooms/insert', protected, async (req,res)=>{
 		}
 	}
 
-    let name, num_beds, houseid,owner, floor_size="", images=[], status =1, amenities="",minimum_booking, maximum_booking;
+    let name, num_beds, owner, floor_size="", images=[], status =1, amenities="",minimum_booking, maximum_booking, price;
     if(errors.length === 0){
         let keys = Object.keys(body);
 		if (keys.includes('name')) {
@@ -186,11 +185,7 @@ router.post('/rooms/insert', protected, async (req,res)=>{
 			errors.push('Number of beds should be provided in the request body.');
 		}
 
-        if (keys.includes('houseid')) {
-			houseid = body.houseid;
-		}else {
-			errors.push('Houseid should be provided in the request body.');
-		}
+       
         if (keys.includes('owner')) {
 			owner = body.owner;
 		}else {
@@ -213,13 +208,16 @@ router.post('/rooms/insert', protected, async (req,res)=>{
         if (keys.includes('minimum_booking')) {
 			minimum_booking = body.minimum_booking;
 		}
+		if (keys.includes('price')) {
+			price = body.price;
+		}
     }
 
 
     if(errors.length === 0){
-        let document = {name, num_beds, houseid, images, status, floor_size, amenities, status, maximum_booking,minimum_booking};
+        let document = {name, num_beds, images, status, floor_size, amenities, owner, maximum_booking,minimum_booking, price};
         try {
-			    await MongoDB.createRoom(document);
+			 await MongoDB.createRoom(document);
 		}
 		catch (err) {
 			errors.push(`Unable to add Room. ${err.message}`);
@@ -238,7 +236,7 @@ router.post('/rooms/insert', protected, async (req,res)=>{
 // get room
 router.post('/rooms/search', protected, async (req,res)=>{
     let errors = [];
-	let body = req.body;
+	let body = req.body.data;
 
 	if (typeof body === 'string') {
 		try {
@@ -255,9 +253,8 @@ router.post('/rooms/search', protected, async (req,res)=>{
         if (keys.includes('_id')) {
 			searchCriteria._id = body._id;
 		}
-
-		if (keys.includes('houseid')) {
-			searchCriteria.houseid = body.houseid;
+		if (keys.includes('owner')) {
+			searchCriteria.owner = body.owner;
 		}
     }    
     searchCriteria.status =1
